@@ -37,6 +37,7 @@ export default function TabBar({ onStart }) {
         <span>{S.active ? t('Resume') : t('Start')}</span>
       </button>
       <Tab k="stats" icon="chart" to="/stats" label={t('Stats')} />
+      <Tab k="goals" icon="target" to="/goals" label={t('Goals')} />
       <Tab k="library" icon="list" to="/library" label={t('Exercises')} />
     </nav>
   )
