@@ -250,6 +250,32 @@ function GoalSheet({ close }) {
   </>
 }
 export const goalSheet = () => ui().openSheet(close => <GoalSheet close={close} />)
+/* ============================ create bodyweight goal ============================ */
+function BodyweightGoalCreateSheet({ close }) {
+  const st = S()
+  const bw = lastBW(st)
+  const [v, setV] = useState(bw ? bw.w : 70)
+  return <>
+    <h3>{t('Add bodyweight goal')}</h3>
+    <div className="muted small">{t('Set your target body weight.')}</div>
+    <WeightInput value={v} setValue={setV} unit={st.unit} />
+    <div style={{ height: 14 }} />
+    <Button variant="primary" onClick={() => {
+      const n = Math.round((v || 0) * 10) / 10
+      if (!n || n <= 0) { toast(t('Enter a valid weight')); return }
+      update(s => {
+        const g = { id: uid(), type: 'bodyweight', targetBodyweight: n, status: 'active' }
+        if (bw) g.startBodyweight = bw.w
+        s.goals.push(g)
+      })
+      close()
+      toast(t('Goal added'))
+    }}>{t('Save goal')}</Button>
+  </>
+}
+
+export const bodyweightGoalCreateSheet = () => ui().openSheet(close => <BodyweightGoalCreateSheet close={close} />)
+
 
 /* ============================ exercise detail ============================ */
 // Estimated 1RM for one exercise (issue #18): what the log already implies, plus a calculator
