@@ -16,11 +16,6 @@ import { todayISO, weekKey } from './format.js'
 // Filter goals by status
 export const activeGoals = S => (S.goals || []).filter(g => g.status === 'active')
 export const completedGoals = S => (S.goals || []).filter(g => g.status === 'completed')
-export const archivedGoals = S => (S.goals || []).filter(g => g.status === 'archived')
-
-// All goals for a specific exercise (useful for showing related goals in exercise detail)
-export const goalsForExercise = (S, exerciseId) =>
-  (S.goals || []).filter(g => g.type === 'strength' && g.exerciseId === exerciseId)
 
 // Compute current progress for a goal. Returns:
 //   {
@@ -154,50 +149,6 @@ export function goalProgress(S, goal) {
       }
     }
 
-    case 'custom': {
-      // Use manually entered current value
-      const current = goal.currentValue || 0
-      const start = goal.startValue || 0
-      const target = goal.targetValue
-
-      const range = target - start
-      if (range === 0) {
-        const hasData = goal.currentValue != null || (goal.checkIns && goal.checkIns.length > 0)
-        if (!hasData) {
-          return { current: 0, target, start, progress: 0, achieved: false, hasData: false }
-        }
-        return {
-          current,
-          target,
-          start,
-          progress: 1.0,
-          achieved: true,
-          hasData: true
-        }
-      }
-
-      const progressRaw = (current - start) / range
-      const progress = Math.max(0, progressRaw)
-
-      // Custom goals can be directional (increase or decrease)
-      const achieved = range > 0 ? current >= target : current <= target
-
-
-      const hasData = goal.currentValue != null || (goal.checkIns && goal.checkIns.length > 0)
-      if (!hasData) {
-        return { current: 0, target, start, progress: 0, achieved: false, hasData: false }
-      }
-
-      return {
-        current,
-        target,
-        start,
-        progress: Math.min(1.0, progress),
-        achieved,
-        hasData: true
-      }
-    }
-
     default:
       return null
   }
@@ -207,23 +158,4 @@ export function goalProgress(S, goal) {
 export function isGoalAchieved(S, goal) {
   const progress = goalProgress(S, goal)
   return progress ? progress.achieved : false
-}
-
-// Get all goals that were just achieved (for post-workout celebration)
-// This should be called with the updated state after a workout is saved
-export function newlyAchievedGoals(S) {
-  return activeGoals(S).filter(g => isGoalAchieved(S, g))
-}
-
-// Check if a goal deadline has passed
-export function isGoalOverdue(goal) {
-  if (!goal.targetDate) return false
-  return Date.now() > goal.targetDate
-}
-
-// Days remaining until goal deadline (negative if overdue)
-export function daysUntilDeadline(goal) {
-  if (!goal.targetDate) return null
-  const msRemaining = goal.targetDate - Date.now()
-  return Math.ceil(msRemaining / (24 * 60 * 60 * 1000))
 }

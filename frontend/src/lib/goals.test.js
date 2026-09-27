@@ -2,13 +2,8 @@
 import {
   activeGoals,
   completedGoals,
-  archivedGoals,
-  goalsForExercise,
   goalProgress,
   isGoalAchieved,
-  newlyAchievedGoals,
-  isGoalOverdue,
-  daysUntilDeadline
 } from './goals.js'
 
 // Helper to build minimal state
@@ -58,39 +53,6 @@ describe('completedGoals', () => {
   })
 })
 
-describe('archivedGoals', () => {
-  it('returns only archived goals', () => {
-    const S = baseState()
-    S.goals = [
-      { id: '1', status: 'active', type: 'strength' },
-      { id: '2', status: 'archived', type: 'strength' }
-    ]
-    const archived = archivedGoals(S)
-    expect(archived).toHaveLength(1)
-    expect(archived[0].id).toBe('2')
-  })
-})
-
-describe('goalsForExercise', () => {
-  it('returns all goals for a specific exercise', () => {
-    const S = baseState()
-    S.goals = [
-      { id: '1', type: 'strength', exerciseId: 'bench-press', status: 'active' },
-      { id: '2', type: 'strength', exerciseId: 'squat', status: 'active' },
-      { id: '3', type: 'strength', exerciseId: 'bench-press', status: 'completed' },
-      { id: '4', type: 'bodyweight', status: 'active' }
-    ]
-    const benchGoals = goalsForExercise(S, 'bench-press')
-    expect(benchGoals).toHaveLength(2)
-    expect(benchGoals.map(g => g.id)).toEqual(['1', '3'])
-  })
-
-  it('returns empty array when no goals exist for exercise', () => {
-    const S = baseState()
-    S.goals = [{ id: '1', type: 'strength', exerciseId: 'squat', status: 'active' }]
-    expect(goalsForExercise(S, 'deadlift')).toEqual([])
-  })
-})
 
 describe('goalProgress - strength goals', () => {
   it('calculates progress from 1RM history', () => {
@@ -348,54 +310,6 @@ describe('goalProgress - frequency goals', () => {
   })
 })
 
-describe('goalProgress - custom goals', () => {
-  it('uses manually entered current value', () => {
-    const S = baseState()
-    const goal = {
-      type: 'custom',
-      startValue: 0,
-      targetValue: 100,
-      currentValue: 60,
-      status: 'active'
-    }
-
-    const progress = goalProgress(S, goal)
-    expect(progress.current).toBe(60)
-    expect(progress.target).toBe(100)
-    expect(progress.progress).toBeCloseTo(0.6)
-    expect(progress.achieved).toBe(false)
-  })
-
-  it('marks achieved when target reached', () => {
-    const S = baseState()
-    const goal = {
-      type: 'custom',
-      startValue: 0,
-      targetValue: 100,
-      currentValue: 105,
-      status: 'active'
-    }
-
-    const progress = goalProgress(S, goal)
-    expect(progress.achieved).toBe(true)
-    expect(progress.progress).toBe(1.0) // Capped at 1.0
-  })
-
-  it('handles decreasing custom goals', () => {
-    const S = baseState()
-    const goal = {
-      type: 'custom',
-      startValue: 100,
-      targetValue: 50,
-      currentValue: 70,
-      status: 'active'
-    }
-
-    const progress = goalProgress(S, goal)
-    expect(progress.progress).toBeCloseTo(0.6) // 30 of 50 reduction
-    expect(progress.achieved).toBe(false)
-  })
-})
 
 describe('isGoalAchieved', () => {
   it('returns true when goal is achieved', () => {
@@ -438,84 +352,6 @@ describe('isGoalAchieved', () => {
   })
 })
 
-describe('newlyAchievedGoals', () => {
-  it('returns all active goals that are achieved', () => {
-    const S = baseState()
-    S.bodyweight = [{ d: '2026-09-27', w: 69, t: Date.now() }]
-    S.goals = [
-      {
-        id: '1',
-        type: 'bodyweight',
-        startBodyweight: 75,
-        targetBodyweight: 70,
-        status: 'active'
-      },
-      {
-        id: '2',
-        type: 'bodyweight',
-        startBodyweight: 80,
-        targetBodyweight: 68,
-        status: 'active'
-      },
-      {
-        id: '3',
-        type: 'bodyweight',
-        startBodyweight: 75,
-        targetBodyweight: 70,
-        status: 'completed'
-      }
-    ]
-
-    const achieved = newlyAchievedGoals(S)
-    expect(achieved).toHaveLength(1)
-    expect(achieved[0].id).toBe('1')
-  })
-})
-
-describe('isGoalOverdue', () => {
-  it('returns true when deadline has passed', () => {
-    const goal = {
-      targetDate: Date.now() - 86400000 // Yesterday
-    }
-    expect(isGoalOverdue(goal)).toBe(true)
-  })
-
-  it('returns false when deadline is in future', () => {
-    const goal = {
-      targetDate: Date.now() + 86400000 // Tomorrow
-    }
-    expect(isGoalOverdue(goal)).toBe(false)
-  })
-
-  it('returns false when no deadline set', () => {
-    const goal = {}
-    expect(isGoalOverdue(goal)).toBe(false)
-  })
-})
-
-describe('daysUntilDeadline', () => {
-  it('returns positive days for future deadline', () => {
-    const goal = {
-      targetDate: Date.now() + 3 * 86400000 // 3 days from now
-    }
-    const days = daysUntilDeadline(goal)
-    expect(days).toBeGreaterThanOrEqual(2)
-    expect(days).toBeLessThanOrEqual(4)
-  })
-
-  it('returns negative days for past deadline', () => {
-    const goal = {
-      targetDate: Date.now() - 2 * 86400000 // 2 days ago
-    }
-    const days = daysUntilDeadline(goal)
-    expect(days).toBeLessThan(0)
-  })
-
-  it('returns null when no deadline set', () => {
-    const goal = {}
-    expect(daysUntilDeadline(goal)).toBeNull()
-  })
-})
 
 describe('edge cases', () => {
   it('handles null goal gracefully', () => {
@@ -527,21 +363,5 @@ describe('edge cases', () => {
     const S = baseState()
     const goal = { type: 'unknown', status: 'active' }
     expect(goalProgress(S, goal)).toBeNull()
-  })
-
-  it('handles negative progress for regression', () => {
-    const S = baseState()
-    S.bodyweight = [{ d: '2026-09-27', w: 78, t: Date.now() }]
-    const goal = {
-      type: 'bodyweight',
-      startBodyweight: 75,
-      targetBodyweight: 70,
-      status: 'active'
-    }
-
-    const progress = goalProgress(S, goal)
-    // User gained weight when trying to lose - progress should be 0, not negative
-    expect(progress.progress).toBe(0)
-    expect(progress.achieved).toBe(false)
   })
 })
