@@ -1,9 +1,9 @@
-{
-  "appId": "ch.duartesantos.opengym",
-  "appName": "openGym",
-  "webDir": "dist",
-  "backgroundColor": "#0c0e12",
-  "android": {
-    "allowMixedContent": false
-  }
+﻿{
+    "appId":  "ch.duartesantos.opengym",
+    "webDir":  "dist",
+    "appName":  "FitForge",
+    "backgroundColor":  "#0c0e12",
+    "android":  {
+                    "allowMixedContent":  false
+                }
 }

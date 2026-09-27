@@ -89,7 +89,8 @@
 }
 
 /* accents — Apple's system colours, so a recolour never looks off-system */
-:root[data-accent="lime"],:root[data-accent="violet"] { --acc:var(--primary); --acc-2:#6D28D9; --on-acc:#fff }
+:root[data-accent="lime"]   { --acc:var(--green); --acc-2:#16A34A; --on-acc:#fff }
+:root[data-accent="violet"] { --acc:var(--primary); --acc-2:#6D28D9; --on-acc:#fff }
 :root[data-accent="sky"],:root[data-accent="teal"] { --acc:var(--secondary); --acc-2:#0891B2; --on-acc:#06202A }
 :root[data-accent="orange"]{ --acc:var(--orange); --acc-2:#B45309; --on-acc:#fff }
 :root[data-accent="pink"]  { --acc:var(--pink);   --acc-2:#BE185D; --on-acc:#fff }

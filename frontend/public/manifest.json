@@ -1,15 +1,25 @@
-{
-  "name": "openGym",
-  "short_name": "openGym",
-  "description": "Personal gym & body weight tracker",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#0c0e12",
-  "theme_color": "#0c0e12",
-  "icons": [
-    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
-  ]
+﻿{
+    "description":  "FitForge - Build strength with precision",
+    "short_name":  "FitForge",
+    "background_color":  "#0c0e12",
+    "icons":  [
+                  {
+                      "purpose":  "any",
+                      "type":  "image/png",
+                      "sizes":  "180x180",
+                      "src":  "icon-180.png"
+                  },
+                  {
+                      "purpose":  "any maskable",
+                      "type":  "image/png",
+                      "sizes":  "512x512",
+                      "src":  "icon-512.png"
+                  }
+              ],
+    "orientation":  "portrait",
+    "theme_color":  "#0c0e12",
+    "display":  "standalone",
+    "name":  "FitForge",
+    "scope":  "./",
+    "start_url":  "./"
 }
