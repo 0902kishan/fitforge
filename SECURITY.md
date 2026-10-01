@@ -1,14 +1,15 @@
 # Security policy
 
-openGym is a self-hosted app: you run the server, you hold the data. This file says which
+FitForge is a self-hosted app: you run the server, you hold the data. This file says which
 versions get fixes, how to report something privately, and — the part most people actually
 need — what the app protects you from and what it doesn't.
 
 ## Supported versions
 
-Only the **latest release**. Releases are semver tags (`v1.0.0` → `v1.2.3`, see
-[CHANGELOG.md](CHANGELOG.md)); there is no LTS or maintenance branch and older tags are never
-patched. A fix ships in the next release and in the `latest` images on ghcr.io.
+Only the **latest `main`**. There is no LTS or maintenance branch: fixes land on `main`, and
+older checkouts are never patched. Note that `docker compose pull` fetches the upstream
+project's prebuilt images from ghcr.io — build from source
+(`docker compose up -d --build`) to run this repository's code.
 
 Updating a self-hosted instance:
 
@@ -20,7 +21,7 @@ git pull && docker compose pull && docker compose up -d
 
 Use GitHub's private vulnerability reporting — repo **Security** tab → **Report a vulnerability**:
 
-<https://github.com/DuarteSantos8/openGym/security/advisories/new>
+<https://github.com/0902kishan/fitforge/security/advisories/new>
 
 > Private reporting has to be switched on in the repository settings for that link to work
 > (Settings → Advanced Security → Private vulnerability reporting). If it 404s, open a normal
@@ -35,8 +36,8 @@ Useful in a report: the version or commit, whether you're running the prebuilt i
 source build, your `RP_ID`/`ORIGIN` and what sits in front of the app, steps to reproduce, and
 what an attacker gets out of it.
 
-**On response times:** this is a hobby project maintained by one person alongside school. There
-is no SLA and no bounty. Expect days rather than hours, and longer during exam periods. If a
+**On response times:** this is a hobby project. There is no SLA and no bounty. Expect days
+rather than hours. If a
 week goes by with no reply, comment on the advisory thread — it's more likely to be a missed
 notification than a decision. If a report goes unfixed and you want to disclose publicly, say so
 in the thread; there's no objection, and no request to sit on it indefinitely.
@@ -68,12 +69,11 @@ in the thread; there's no objection, and no request to sit on it indefinitely.
   the session cookie isn't marked `Secure`.
 - Scanner output with no working exploit, and `npm audit` findings in build-time
   devDependencies (Vite, Vitest, Capacitor CLI) that never reach a running instance.
-- The GitHub Pages demo build — it has no backend at all, everything stays in that browser.
 - Third-party content: the exercise image/GIF dataset and the CDN it's fetched from.
 
 ## Security model
 
-Read this before hosting openGym for anyone other than yourself.
+Read this before hosting FitForge for anyone other than yourself.
 
 ### What it does
 
@@ -103,7 +103,7 @@ Read this before hosting openGym for anyone other than yourself.
   subscriptions, invite codes), one `state-<uid>.json` per user with their complete workout
   history and body-weight log, `secret`, and `vapid.json`. Anyone who can read that folder — you,
   whoever holds the backups, whoever gets into the host — can read every user's data, and with
-  `secret` can mint a valid session cookie for any account. **If you host openGym for other
+  `secret` can mint a valid session cookie for any account. **If you host FitForge for other
   people, they are trusting you exactly as much as they'd trust any server operator.**
 - **Admins can read everything.** A user listed in `ADMIN_UIDS` (or flagged `admin: true` in
   `db.json`) gets every user's full history and body weight, can disable accounts, and can create

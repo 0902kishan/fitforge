@@ -1,6 +1,6 @@
 # Building the mobile app (iOS / Android)
 
-openGym ships in two flavors from the same codebase:
+FitForge ships in two flavors from the same codebase:
 
 | | **Self-hosted** (this repo's default) | **Mobile app** (`VITE_MOBILE=1`) |
 |---|---|---|
@@ -22,7 +22,7 @@ OS share sheet instead of a browser download.
 - **Android:** Android Studio (bundles the SDK). Java 21 for Gradle.
 - **iOS:** a Mac with Xcode 15+ and CocoaPods (`brew install cocoapods`). A free Apple ID
   is enough to run the app on your own iPhone (see below); paid membership is only needed
-  for App Store distribution, which openGym doesn't do.
+  for App Store distribution, which FitForge doesn't do.
 
 ## Build & run
 
@@ -56,14 +56,13 @@ npx @capacitor/assets generate --iconBackgroundColor '#0c0e12' --splashBackgroun
 
 ## Distribution — deliberately no app stores
 
-openGym's mobile app is not on the Play Store or App Store, and that's a choice: no store
+FitForge's mobile app is not on the Play Store or App Store, and that's a choice: no store
 accounts, no store rules, no yearly fees between you and an open-source app.
 
 ### Android — sideload the APK
 
-The official signed APK is at **[opengym.duarte-santos.ch](https://opengym.duarte-santos.ch)**.
-Android asks you to allow installs from the browser the first time — that's standard for any
-app outside the Play Store.
+There is no prebuilt download — build and sign your own APK (below). Android asks you to allow
+installs from the browser the first time — that's standard for any app outside the Play Store.
 
 To build and sign your own:
 
@@ -73,11 +72,11 @@ cd android && ./gradlew assembleRelease            # → app/build/outputs/apk/r
 
 # one-time: create a keystore. KEEP IT — updates must be signed with the same key,
 # or Android refuses to install the new version over the old one.
-keytool -genkeypair -keystore my.keystore -alias opengym -keyalg RSA -validity 10950
+keytool -genkeypair -keystore my.keystore -alias fitforge -keyalg RSA -validity 10950
 
 # align + sign (zipalign/apksigner ship with the Android SDK build-tools)
 zipalign -f -p 4 app-release-unsigned.apk aligned.apk
-apksigner sign --ks my.keystore --ks-key-alias opengym --out openGym.apk aligned.apk
+apksigner sign --ks my.keystore --ks-key-alias fitforge --out fitforge.apk aligned.apk
 ```
 
 ### iPhone — what's actually possible
@@ -96,7 +95,7 @@ that would simply install. Your free options:
 - Bump `versionName`/`versionCode` in `android/app/build.gradle` per release; keep them in
   step with `frontend/package.json`. `versionCode` must strictly increase or updates won't
   install over an existing APK.
-- **License:** openGym is AGPL-3.0, which by itself sits badly with app-store terms of
+- **License:** FitForge is AGPL-3.0, which by itself sits badly with app-store terms of
   service. `NOTICE.md` carries an app-store exception (an additional permission under
   AGPL §7) granted by the copyright holder — relevant only if store distribution ever happens.
 - The app requests notification permission only when the workout-day reminder is switched

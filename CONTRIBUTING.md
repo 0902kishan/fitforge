@@ -1,6 +1,6 @@
-# Contributing to openGym
+# Contributing to FitForge
 
-Thanks for taking a look! openGym is intentionally small and dependency-light, and the goal is
+Thanks for taking a look! FitForge is intentionally small and dependency-light, and the goal is
 to keep it that way — easy to read, easy to self-host.
 
 ## Project layout
@@ -17,7 +17,7 @@ docs/      self-hosting guide.
 ## Running for development
 
 ```bash
-cp .env.example .env
+touch .env                       # docker compose reads it; the defaults are fine for local dev
 docker compose up -d --build      # api + web + media on :8080
 # frontend hot reload:
 cd frontend && npm install && npm run dev
@@ -52,13 +52,13 @@ cd frontend && npm test
 
 | You have | Goes to |
 | --- | --- |
-| A question, or self-hosting that won't behave | [Discussions → Q&A](https://github.com/DuarteSantos8/openGym/discussions/categories/q-a) |
-| An idea you're not sure about yet | [Discussions → Ideas](https://github.com/DuarteSantos8/openGym/discussions/categories/ideas) |
-| A reproducible bug | [Issues](https://github.com/DuarteSantos8/openGym/issues) |
+| A question, or self-hosting that won't behave | [Issues](https://github.com/0902kishan/fitforge/issues) |
+| An idea you're not sure about yet | [Issues](https://github.com/0902kishan/fitforge/issues) |
+| A reproducible bug | [Issues](https://github.com/0902kishan/fitforge/issues) |
 | A change you've already built | A pull request |
 
-An answered question in Q&A is worth more than the same answer buried in a closed issue — the
-next person searching "passkey login fails behind my reverse proxy" actually finds it.
+Ask the question in a well-titled issue — the next person searching "passkey login fails behind my
+reverse proxy" actually finds it.
 
 ## Reporting bugs
 

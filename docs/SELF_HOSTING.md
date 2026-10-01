@@ -1,6 +1,6 @@
-# Self-hosting openGym
+# Self-hosting FitForge
 
-openGym is two small containers (a web server and an API) plus a folder of your data.
+FitForge is two small containers (a web server and an API) plus a folder of your data.
 This guide takes you from "just cloned it" to "using it from my phone over the internet".
 
 ## 1. Run it locally (5 minutes)
@@ -8,9 +8,9 @@ This guide takes you from "just cloned it" to "using it from my phone over the i
 Requirements: [Docker](https://docs.docker.com/get-docker/) with the Compose plugin.
 
 ```bash
-git clone https://github.com/DuarteSantos8/gym-app opengym
-cd opengym
-cp .env.example .env
+git clone https://github.com/0902kishan/fitforge fitforge
+cd fitforge
+touch .env
 docker compose pull   # prebuilt images from ghcr.io (amd64 + arm64) — or skip and build from source
 docker compose up -d
 ```
@@ -31,20 +31,20 @@ Logs: `docker compose logs -f`. Stop: `docker compose down`.
 
 ## 2. Understand the passkey requirement (important)
 
-openGym signs you in with **passkeys** (WebAuthn). Browsers enforce two rules:
+FitForge signs you in with **passkeys** (WebAuthn). Browsers enforce two rules:
 
 1. Passkeys are bound to an exact **hostname** (`RP_ID`).
 2. They only work over **HTTPS** — with one exception: `http://localhost`.
 
 So `http://localhost:8080` works on the machine running Docker, but **another device (your
 phone) cannot use `http://<your-LAN-ip>:8080`** — that's neither localhost nor HTTPS, so the
-passkey prompt won't appear. To use openGym from your phone you need a real HTTPS hostname.
+passkey prompt won't appear. To use FitForge from your phone you need a real HTTPS hostname.
 
 (You can still open it over LAN in **guest mode**, which stores data only in that browser.)
 
 ## 3. Expose it over HTTPS on your own domain
 
-Put openGym behind something that terminates TLS for a hostname you control, then point it at
+Put FitForge behind something that terminates TLS for a hostname you control, then point it at
 the `web` container. Pick whichever you already run:
 
 ### Option A — Cloudflare Tunnel (no open ports)
@@ -63,7 +63,7 @@ gym.example.com {
 ### Option C — Traefik / nginx / Nginx Proxy Manager
 
 Route `gym.example.com` (HTTPS) → `web:80` (or `<docker-host>:8080`). Any reverse proxy works —
-openGym only needs the browser to reach it over `https://gym.example.com`.
+FitForge only needs the browser to reach it over `https://gym.example.com`.
 
 Then set your domain in `.env` and restart:
 
@@ -72,7 +72,7 @@ Then set your domain in `.env` and restart:
 RP_ID=gym.example.com
 ORIGIN=https://gym.example.com
 WEB_PORT=8080
-RP_NAME=openGym
+RP_NAME=FitForge
 ```
 
 ```bash
@@ -112,7 +112,7 @@ Access…) in front still works, and composes with the above.
 Everything is in `./data`:
 
 ```bash
-tar czf opengym-backup-$(date +%F).tar.gz data/
+tar czf fitforge-backup-$(date +%F).tar.gz data/
 ```
 
 That archive contains all profiles, passkeys and workout history. Restore by unpacking it back
@@ -120,7 +120,7 @@ into the project folder. (Individual users can also export their own data as JSO
 
 ## 6. Notifications
 
-openGym can push two kinds of alert to your phone/desktop, even when the app isn't open:
+FitForge can push two kinds of alert to your phone/desktop, even when the app isn't open:
 rest-timer-over, and a reminder on days you have a workout planned but haven't logged one yet.
 Turn it on per-profile in **Settings → Notifications** (requires a signed-in passkey profile and
 HTTPS — see section 3).

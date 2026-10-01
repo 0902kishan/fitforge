@@ -1,5 +1,9 @@
 # Changelog
 
+> **Note:** the entries below document the upstream **openGym** project this codebase derives
+> from. FitForge-specific work is tracked in the
+> [commit history](https://github.com/0902kishan/fitforge/commits/main) instead.
+
 ## v1.2.4 — 2026-08-01
 
 The effort ratings you have been recording since v1.2.3 now answer questions, and bodyweight
